@@ -1,0 +1,10 @@
+.env
+.env.test
+
+coverage.*
+gin-bin
+test.*
+
+.idea
+.DS_Store
+todo-echo
