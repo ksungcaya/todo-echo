@@ -14,10 +14,9 @@ import (
 
 func main() {
 	config := configs.New()
-	db, err := database.New(&config.Database, config.IsProd())
-
-	if err != nil {
-		panic(err)
+	db := database.New(&config.Database, config.IsProd())
+	if conn, ok := db.DB(); ok != nil {
+		defer conn.Close()
 	}
 
 	database.AutoMigrate(db)

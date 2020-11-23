@@ -13,7 +13,7 @@ import (
 )
 
 // New creates new db instance
-func New(config *configs.DatabaseConfig, isProd bool) (*gorm.DB, error) {
+func New(config *configs.DatabaseConfig, isProd bool) *gorm.DB {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		config.MySQL.Username,
 		config.MySQL.Password,
@@ -24,10 +24,10 @@ func New(config *configs.DatabaseConfig, isProd bool) (*gorm.DB, error) {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
-	return db, nil
+	return db
 }
 
 // TestDB creates a test database

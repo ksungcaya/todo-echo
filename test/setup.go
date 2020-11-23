@@ -27,15 +27,17 @@ func LoadTestEnv() error {
 
 // InitTestDB will migrate db tables
 func InitTestDB() (*gorm.DB, error) {
-	err := LoadTestEnv()
-	config := configs.New()
-	db, err := database.New(&config.Database, false)
-
-	if err != nil {
+	if err := LoadTestEnv(); err != nil {
 		panic(err)
 	}
 
-	database.Refresh(db)
+	config := configs.New()
+	db := database.New(&config.Database, false)
+	database.AutoMigrate(db)
+
+	if conn, ok := db.DB(); ok != nil {
+		defer conn.Close()
+	}
 
 	return db, nil
 }
