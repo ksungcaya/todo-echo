@@ -81,7 +81,7 @@ func (ur *userRepoGorm) Create(user *models.User) error {
 // consumes this method, we will check there if a new password
 // has been provided and perform the hasing there.
 func (ur *userRepoGorm) Update(user *models.User) error {
-	return ur.db.Save(user).Error
+	return ur.db.Updates(user).Error
 }
 
 // Delete will delete a record from the database by ID

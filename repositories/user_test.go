@@ -100,12 +100,14 @@ func (suite *UserRepositoryTestSuite) TestUpdate() {
 	suite.db.Where("username = ?", suite.user.Username).First(&u)
 
 	// update
+	u.Username = ""
 	u.Name = "Mary Jane Doe"
 	suite.repo.Update(&u)
 
 	var updated models.User
 	suite.db.Where("username = ?", suite.user.Username).First(&updated)
 
+	assert.NotEmpty(updated.Username) // username should not be updated
 	assert.NotEqual(suite.user.Name, updated.Name)
 	assert.Equal("Mary Jane Doe", updated.Name)
 	assert.True(updated.CheckPassword("secret")) // password should not be updated
