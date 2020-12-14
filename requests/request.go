@@ -1,6 +1,9 @@
 package requests
 
 import (
+	"errors"
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"gopkg.in/thedevsaddam/govalidator.v1"
 )
@@ -9,6 +12,15 @@ import (
 type Request interface {
 	rules() govalidator.MapData
 	Validate(ctx echo.Context) (int, error)
+}
+
+// BindRequest binds the context parameters to request struct
+func BindRequest(request Request, ctx echo.Context) (int, error) {
+	if err := ctx.Bind(request); err != nil {
+		return http.StatusBadRequest, errors.New("Invalid request payload")
+	}
+
+	return http.StatusOK, nil
 }
 
 // ValidateRequest validates the request with set rules

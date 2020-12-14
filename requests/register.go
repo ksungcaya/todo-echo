@@ -21,8 +21,8 @@ var _ Request = &RegisterRequest{}
 
 // Validate will validate the request with the given context
 func (rr *RegisterRequest) Validate(ctx echo.Context) (int, error) {
-	if err := ctx.Bind(rr); err != nil {
-		return http.StatusBadRequest, err
+	if code, err := BindRequest(rr, ctx); err != nil {
+		return code, err
 	}
 	if err := ValidateRequest(rr); err != nil {
 		return http.StatusUnprocessableEntity, err
@@ -43,7 +43,7 @@ func (rr *RegisterRequest) UserModel() *models.User {
 // rules is a privated function called on request validation
 func (rr *RegisterRequest) rules() govalidator.MapData {
 	return govalidator.MapData{
-		"username": []string{"required", "between:3,5"},
+		"username": []string{"required", "between:3,100"},
 		"email":    []string{"required", "min:4", "max:20", "email"},
 		"name":     []string{"required", "min:4", "max:20"},
 		"password": []string{"required", "min:6"},
